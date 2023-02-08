@@ -37,9 +37,8 @@ class BNetwork:
                 break
         if var is None:
             raise Exception("Could not find variable. Please be sure to create it first with add_variable")
-
-        for variable in self.variables:
-            for p_var_name in parent_variable_names:
+        for p_var_name in parent_variable_names:
+            for variable in self.variables:
                 if variable.name == p_var_name:
                     parents.append(variable)
 
@@ -56,12 +55,37 @@ class BNetwork:
 
     def enumeration_ask(self, query: {str: bool}, observed_values: {str: bool}):
         expanded = {}
-
         expanded.update(query)
         expanded.update(observed_values)
-        qx = self.enumerate_all(self.variables, expanded)
+        sorted_variables: [BNVariable] = []
+        sorted_count = 0
+        while len(self.variables) > sorted_count:
+            for v in self.variables:
+
+                if self.list_contains(v, sorted_variables):
+                    break
+                if len(v.parents) == 0:
+                    sorted_variables.append(v)
+                    sorted_count += 1
+                else:
+                    all_parents_present = False
+                    for p in v.parents:
+                        if not self.list_contains(p, sorted_variables):
+                            break
+                        all_parents_present = True
+                    if all_parents_present:
+                        sorted_variables.append(v)
+                        sorted_count += 1
+
+        qx = self.enumerate_all(sorted_variables, expanded)
 
         return qx
+
+    def list_contains(self, value: BNVariable, list: [BNVariable]) -> bool:
+        for l_var in list:
+            if l_var.name == value.name:
+                return True
+        return False
 
     def enumerate_all(self, variables: [BNVariable], observed_values: {str: bool}) -> float:
         cloned_vars: [BNVariable] = variables.copy()

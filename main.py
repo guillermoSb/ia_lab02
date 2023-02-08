@@ -4,9 +4,11 @@ from BNetwork import  BNetwork
 if __name__ == '__main__':
     network = BNetwork()
 
+    network.add_variable("C")
     network.add_variable("E")
     network.add_variable("M")
-    network.add_variable("C")
+
+
     network.set_parents_to_variable("C", ["E", "M"])
 
     network.add_probability("E", 0.1)
@@ -17,7 +19,7 @@ if __name__ == '__main__':
     network.add_probability("C|EM", 1.0)
 
 
-    p2 = network.inference({'M': False}, {'C': True, 'E': True})
+    p2 = network.inference({'E': True}, {'C': True,})
     print(p2)
 
 
