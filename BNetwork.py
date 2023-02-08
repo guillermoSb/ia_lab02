@@ -16,6 +16,7 @@ class BNetwork:
     probs = {}
     variables = []
 
+
     def add_variable(self, variable_name: str):
         new_variable = BNVariable(variable_name)
         self.variables.append(new_variable)
@@ -26,6 +27,28 @@ class BNetwork:
             self.probs[probability_string[1:]] = 1 - probability_value
         else:
             self.probs["-" + probability_string] = 1 - probability_value
+
+    def calculate_sorted(self):
+        sorted_variables: [BNVariable] = []
+        sorted_count = 0
+        while len(self.variables) > sorted_count:
+            for v in self.variables:
+
+                if self.list_contains(v, sorted_variables):
+                    break
+                if len(v.parents) == 0:
+                    sorted_variables.append(v)
+                    sorted_count += 1
+                else:
+                    all_parents_present = False
+                    for p in v.parents:
+                        if not self.list_contains(p, sorted_variables):
+                            break
+                        all_parents_present = True
+                    if all_parents_present:
+                        sorted_variables.append(v)
+                        sorted_count += 1
+        return sorted_variables
 
     def set_parents_to_variable(self, variable_name: str, parent_variable_names: [str]):
         var = None
@@ -57,25 +80,7 @@ class BNetwork:
         expanded = {}
         expanded.update(query)
         expanded.update(observed_values)
-        sorted_variables: [BNVariable] = []
-        sorted_count = 0
-        while len(self.variables) > sorted_count:
-            for v in self.variables:
-
-                if self.list_contains(v, sorted_variables):
-                    break
-                if len(v.parents) == 0:
-                    sorted_variables.append(v)
-                    sorted_count += 1
-                else:
-                    all_parents_present = False
-                    for p in v.parents:
-                        if not self.list_contains(p, sorted_variables):
-                            break
-                        all_parents_present = True
-                    if all_parents_present:
-                        sorted_variables.append(v)
-                        sorted_count += 1
+        sorted_variables = self.calculate_sorted()
 
         qx = self.enumerate_all(sorted_variables, expanded)
 
@@ -121,3 +126,19 @@ class BNetwork:
             return prob_1 * self.enumerate_all(cloned_vars, extended_1) \
                    + prob_2 * self.enumerate_all(cloned_vars, extended_2)
 
+    def compact_string(self):
+        sorted_variables = self.calculate_sorted()
+        compact_string = ""
+        for v in sorted_variables:
+            v_s = "P(" + v.name
+            if len(v.parents) > 0:
+                v_s += "|"
+                for p in v.parents:
+                    v_s += p.name
+            v_s += ")"
+            compact_string += v_s
+        return compact_string
+
+
+    def __str__(self):
+        return self.compact_string()
