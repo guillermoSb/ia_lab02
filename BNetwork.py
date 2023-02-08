@@ -1,3 +1,4 @@
+from prettytable import PrettyTable
 class BNVariable:
     name = None
     parents = []
@@ -9,7 +10,12 @@ class BNVariable:
         return other.name == self.name
 
     def __str__(self):
-        return "{} - Number of parents: {}".format(self.name, len(self.parents))
+        s = self.name
+        if len(self.parents) > 0:
+            s += "|"
+            for p in self.parents:
+                s += p.name
+        return s
 
 
 class BNetwork:
@@ -139,6 +145,8 @@ class BNetwork:
             compact_string += v_s
         return compact_string
 
+    def factor_string(self):
+        return self.probs.__str__()
 
     def __str__(self):
         return self.compact_string()

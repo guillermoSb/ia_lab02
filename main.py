@@ -27,10 +27,12 @@ if __name__ == '__main__':
     network.add_probability("J|-A", 0.05)
 
 
+
+
     # Probabilidad que haya habido un robo dado que los dos vecinos llamaron
     p = network.inference({'B': True}, {'J': True, 'M': True})
     # Version compacta
     print(network.compact_string())
     print("Resultado de la query: ", p)
 
-
+    print(network.factor_string())
