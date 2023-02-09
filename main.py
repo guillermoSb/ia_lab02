@@ -1,4 +1,4 @@
-from BNetwork import  BNetwork
+from gbnnetwork import BNetwork
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
@@ -31,6 +31,7 @@ if __name__ == '__main__':
 
     # Probabilidad que haya habido un robo dado que los dos vecinos llamaron
     p = network.inference({'B': True}, {'J': True, 'M': True})
+
     # Version compacta
     print(network.compact_string())
     print("Resultado de la query: ", p)
