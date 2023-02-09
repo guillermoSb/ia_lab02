@@ -36,4 +36,5 @@ if __name__ == '__main__':
     print(network.compact_string())
     print("Resultado de la query: ", p)
 
+
     print(network.factor_string())
