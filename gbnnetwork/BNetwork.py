@@ -28,6 +28,8 @@ class BNetwork:
         self.variables.append(new_variable)
 
     def add_probability(self, probability_string: str, probability_value: float):
+        if probability_value < 0 or probability_value > 1:
+            raise Exception('Probability needs to be between 1 and 0')
         self.probs[probability_string] = probability_value
         if probability_string[0] == "-":
             self.probs[probability_string[1:]] = 1 - probability_value
@@ -92,7 +94,7 @@ class BNetwork:
 
         return qx
 
-    def list_contains(self, value: BNVariable, list: [BNVariable]) -> bool:
+    def list_contains(self, value, list: []) -> bool:
         for l_var in list:
             if l_var.name == value.name:
                 return True
@@ -144,6 +146,20 @@ class BNetwork:
             v_s += ")"
             compact_string += v_s
         return compact_string
+
+    # def validate_defined_state(self):
+    #     for v in self.variables:
+    #         if len(v.parents) == 0:
+    #             v_in_prob = self.list_contains(v.name, self.probs.keys())
+    #             if not v_in_prob:
+    #                 return False
+    #         else:
+    #
+    #
+
+
+
+
 
     def factor_string(self):
         return self.probs.__str__()

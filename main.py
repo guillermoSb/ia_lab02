@@ -17,10 +17,12 @@ if __name__ == '__main__':
 
     network.add_probability("B", 0.001)
     network.add_probability("E", 0.002)
+
     network.add_probability("A|BE", 0.95)
     network.add_probability("A|-BE", 0.29)
     network.add_probability("A|B-E", 0.94)
     network.add_probability("A|-B-E", 0.001)
+
     network.add_probability("M|A", 0.7)
     network.add_probability("M|-A", 0.01)
     network.add_probability("J|A", 0.9)
