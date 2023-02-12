@@ -10,7 +10,7 @@ Para crear una Red de Inferencia, se deben de seguir los siguientes pasos:
 2. Agregar variables a la red `network.add_variable("A")`
 3. Asignar los padres de cada variable (en caso la variable no tenga padres este paso se puede omitir) `network.set_parents_to_variable("A", ["B", "E"])`
 4. Agregar las probabilidades a las variables para definir la red totalmente. **Toda la red debe de estar definida si se desea responder cualquier consulta** `network.add_probability("A|BE", 0.001)`
-5. Hacer una query `p = network.inference({'B': False}, {'A': False})`
+5. Hacer una query `p = network.inference({'B': False}, {'A': False})` (Si se desea hacer una query sin valores observados, el diccionario se debe enviar vacío)
 
 ## Funciones De Utilidad
 1. Obtener la representación compacta `network.compact_string()` (string)
