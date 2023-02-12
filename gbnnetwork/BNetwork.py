@@ -111,10 +111,13 @@ class BNetwork:
 		
 		# Answers a query given some observed values
 		def inference(self, query: {str: bool}, observed_values: {str: bool}):
+				if not self.validate_defined_state():
+					return None
 				o = observed_values.copy()
 				evidence_prob = self.enumeration_ask(o, {})
 				dis_prob = self.enumeration_ask(query, observed_values)
 				return dis_prob / evidence_prob
+				
 		
 		# Algorithm of enumeration
 		def enumeration_ask(self, query: {str: bool}, observed_values: {str: bool}):
@@ -188,25 +191,11 @@ class BNetwork:
 
 		# Check if the network is defined
 		def validate_defined_state(self):
-				for v in self.variables:
-						if len(v.parents) == 0:
-								v_in_prob = False
-								for p in self.probs.keys():
-									if p == v.name:
-										v_in_prob = True
-										break
-								if not v_in_prob:
-										return False
-						else:
-								key_count = 0
-								for k in self.probs.keys():
-									main_key = k.split('|')[0]
-									if main_key == v.name:
-										key_count += 1
-								if key_count != pow(2, len(v.parents)):
-									return False
-								
-				return True
+				try:
+						self.enumerate_all(self.variables, {})						
+						return True
+				except:
+					return False
 
 								
 		# Get the factor string for the network		
