@@ -36,7 +36,6 @@ if __name__ == '__main__':
 
     # Version compacta
     print(network.compact_string())
-    print("Resultado de la query: ", p)
-
-
-    print(network.factor_string())
+    
+    print("Resultado de la query (Probabilidad de Robo dado que ambos vecinos llaman): ", p)
+    print("La red esta totalmente definida?", network.validate_defined_state())
